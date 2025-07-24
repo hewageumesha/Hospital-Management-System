@@ -2,8 +2,8 @@ import React from 'react'
 
 const Random = () => {
   return (
-    <div>
-      
+    <div className=''>
+      Random
     </div>
   )
 }
