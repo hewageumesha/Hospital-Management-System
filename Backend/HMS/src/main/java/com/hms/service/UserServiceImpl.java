@@ -50,5 +50,10 @@ public class UserServiceImpl implements UserService {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'updateUser'");
     }
+
+    @Override
+    public UserDTO getUser(String email) throws HMSException{
+        return userRepository.findByEmail(email).orElseThrow(() -> new HMSException("USER_NOT_FOUND")).toDTO();
+    }
     
 }
