@@ -2,7 +2,9 @@ import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 import '@mantine/core/styles.css';
+import '@mantine/notifications/styles.css';
 import { createTheme, MantineProvider } from '@mantine/core';
+import { Notifications } from '@mantine/notifications';
 import AppRoutes from './Routes/AppRoutes';
 
 const theme = createTheme({
@@ -27,6 +29,7 @@ const theme = createTheme({
 function App() {
   return (
     <MantineProvider theme={theme}>
+      <Notifications position='top-center' />
       <AppRoutes />
     </MantineProvider>
   );

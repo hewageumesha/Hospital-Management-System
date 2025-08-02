@@ -20,7 +20,13 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.csrf().disable().authorizeHttpRequests(auth -> auth.requestMatchers(request -> "SECRET".equals(request.getHeader("X-Secret-Key"))).permitAll().anyRequest().denyAll());
+        httpSecurity
+            .cors().and()
+            .csrf().disable()
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers("/user/register", "/user/login", "/user/test").permitAll()
+                .anyRequest().denyAll()
+            );
         return httpSecurity.build();
     }
 

@@ -1,4 +1,4 @@
-package main.java.com.hms.gateway.filter;
+package com.hms.gateway.filter;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -6,7 +6,6 @@ import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
-import reactor.core.publisher.Mono;
 
 @Component
 public class TokenFilter extends AbstractGatewayFilterFactory<TokenFilter.Config> {
@@ -40,7 +39,7 @@ public class TokenFilter extends AbstractGatewayFilterFactory<TokenFilter.Config
 
             try {
                 Claims claims = Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token).getBody();
-                exchange = exchange.mutate().request.request(r -> r.header("X-Secret-Key", "SECRET")).build();
+                exchange = exchange.mutate().request(r -> r.header("X-Secret-Key", "SECRET")).build();
             } catch (Exception e) {
                 throw new RuntimeException("Token is invalid!");
             }

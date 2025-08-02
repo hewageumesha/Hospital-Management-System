@@ -61,7 +61,7 @@ const Sidebar = () => {
               to={link.url}
               key={link.url}
               className={({ isActive }) =>
-                `flex items-center gap-3 w-full font-medium text-neutral-900 px-4 py-5 rounded-lg text-light ${
+                `flex items-center gap-3 w-full font-medium px-4 py-5 rounded-lg text-light ${
                   isActive ? 'bg-primary-400' : 'hover:bg-gray-100 hover:text-dark'}`
               }
             >
