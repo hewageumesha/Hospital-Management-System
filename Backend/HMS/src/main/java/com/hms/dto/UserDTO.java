@@ -28,8 +28,9 @@ public class UserDTO {
     @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[\\W_]).{8,}$", message = "Password should contain at least 1 uppercase, 1 lowercase, 1 digit, and 1 special character with minimum 8 characters.")   
     private String password;
     private Roles role;
+    private Long profileId;
 
     public User toEntity() {
-        return new User(this.id, this.name, this.email, this.password, this.role);
+        return new User(this.id, this.name, this.email, this.password, this.role, this.profileId);
     }
 }

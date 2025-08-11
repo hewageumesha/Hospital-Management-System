@@ -29,8 +29,10 @@ public class Patient {
     private String phone;
     private String address;
     private BloodGroup bloodGroup;
+    private String allergies;
+    private String chronicDiseases;
 
     public PatientDTO toDto() {
-        return new PatientDTO(this.id, this.name, this.email, this.dateOfBirth, this.phone, this.address, this.bloodGroup);
+        return new PatientDTO(this.id, this.name, this.email, this.dateOfBirth, this.phone, this.address, this.bloodGroup, this.allergies, this.chronicDiseases);
     }
 }
