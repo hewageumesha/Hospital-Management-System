@@ -1,11 +1,16 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { TextInput,PasswordInput, Button, SegmentedControl } from '@mantine/core';
 import { IconHeartbeat } from '@tabler/icons-react';
 import { useForm } from '@mantine/form';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
+import { registerUser } from '../Service/UserService';
+import { errorNotification, successNotification } from '../Utility/NotificationUtil';
 
 const RegisterPage = () => {
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
   type FormValues = {
+    name: string,
     type: string,
     email: string;
     password: string;
@@ -13,27 +18,35 @@ const RegisterPage = () => {
   };
   const form = useForm<FormValues>({
     initialValues: {
+      name: '',
       type: 'PATIENT',
       email: '',
       password: '',
       confirmPassword: '',
     },
     validate: {
+      name: (value) => (!value ? 'Name is required' : null),
       email: (value: string) =>
-        /^\S+@\S+$/.test(value) ? null : 'Invalid email',
+        /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) ? null : 'Invalid email',
       password: (value: string) =>
-        /^(?=.*[a-z][A-Z])(?=.*\d)(?=.*[\W_]).{6,}$/.test(value)
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{6,}$/.test(value)
           ? null
           : 'Password must be at least 6 characters and include lowercase, uppercase, number, and special character',
-      confirmPassword: (value: string, values) =>
-      value === values.password
-        ? null
-        : 'Passwords do not match',
+      confirmPassword: (value: string, values: FormValues) =>
+        value === values.password ? null : 'Passwords do not match',
     },
   });
 
   const handleSubmit = (values: { email: string; password: string }) => {
-    console.log("Form values:", values);
+    setLoading(true);
+    registerUser(values).then((data) => {
+      console.log(data);
+      successNotification("Registered Successfully!");
+      navigate('/login');
+    }).catch((error) => {
+      console.log(error);
+      errorNotification(error.response.data.errorMessage);
+    }).finally(() =>  setLoading(false))
   };
 
   return (
@@ -47,6 +60,14 @@ const RegisterPage = () => {
           <div className='self-center font-medium font-heading text-xl text-white'>Register</div>
 
           <SegmentedControl {...form.getInputProps('type')} fullWidth size="md" radius="md" color='pink' bg='none' data={[{label: 'Patient', value: 'PATIENT'}, {label: 'Doctor', value: 'DOCTOR'}, {label: 'Admin', value: 'ADMIN'}]} className='[&_*]:!text-white border border:white' />
+
+          <TextInput className='transition duration-300'
+            variant="unstyled"
+            size="md"
+            radius="md"
+            placeholder="Name"
+            {...form.getInputProps('name')}
+          />
 
           <TextInput className='transition duration-300'
             variant="unstyled"
@@ -72,7 +93,7 @@ const RegisterPage = () => {
             {...form.getInputProps('confirmPassword')}
           />
 
-          <Button radius="md" size='md' type='submit' color='pink'>Register</Button>
+          <Button loading={loading}  radius="md" size='md' type='submit' color='pink'>Register</Button>
 
           <div className='text-neutral-100 text-sm self-center'>Have an account? <Link to='/login' className='hover:underline'>Login</Link></div>
         </form>
